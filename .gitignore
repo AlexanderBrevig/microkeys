@@ -1,7 +1,8 @@
+output/*
 # not certain about the licenses 
 lib/3d/*
 # generated content
-production/*
+*/production/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/kicad
 # Edit at https://www.toptal.com/developers/gitignore?templates=kicad

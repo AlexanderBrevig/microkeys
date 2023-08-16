@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "ergonomisk")(type "KiCad")(uri "${KIPRJMOD}/ergonomisk.pretty")(options "")(descr ""))
+)
