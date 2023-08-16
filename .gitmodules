@@ -1,0 +1,4 @@
+[submodule "ergogen"]
+	path = ergogen
+	url = git@github.com:alexanderbrevig/ergogen
+    branch = ergonomisk

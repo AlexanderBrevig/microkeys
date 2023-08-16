@@ -1,0 +1,153 @@
+
+
+points:
+  zones:
+    matrix:
+      anchor:
+        shift: [100-1.501628-0.090559, -100]
+      columns:
+        ring:
+          key.stagger: 3
+          key.column_net: P5
+          key.mirror.column_net: P20
+          rows.home.key.led_din: P4
+          rows.home.key.led_dout: l_ring_dout
+          rows.home.mirror.key.led_din: r_middle_dout
+          rows.home.mirror.key.led_dout: r_ring_dout
+          
+        middle:
+          key.stagger: 5
+          key.column_net: P6
+          key.mirror.column_net: P19
+          rows.home.key.led_din: l_ring_dout 
+          rows.home.key.led_dout: l_middle_dout
+          rows.home.mirror.key.led_din: r_index_dout
+          rows.home.mirror.key.led_dout: r_middle_dout
+          
+        index:
+          key.stagger: -5
+          key.column_net: P7
+          key.mirror.column_net: P18
+          rows.home.key.led_din: l_middle_dout 
+          rows.home.key.led_dout: l_index_dout
+          rows.home.mirror.key.led_din: l_index_dout
+          rows.home.mirror.key.led_dout: r_index_dout
+          
+      rows:
+        home:
+  rotate: -20
+  mirror:
+    ref: matrix_index_home
+    distance: 50
+
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      bound: true
+      size: [cx,cy]
+      corner: 1
+  cutout:
+    - what: rectangle
+      where: true
+      bound: true
+      size: 14
+      corner: 0
+  _first:
+    - what: outline
+      name: raw
+    - what: rectangle
+      where: 
+        aggregate.parts:
+          - ref: matrix_index_home
+          - ref: mirror_matrix_index_home
+        shift: [0,12]
+      size: [120,15]
+      bound: false
+      operation: add
+    - what: circle
+      where: 
+        aggregate.parts:
+          - ref: matrix_index_home
+          - ref: mirror_matrix_index_home
+        shift: [0,12]
+      radius: 43/2
+      bound: false
+      operation: add
+    - what: rectangle
+      where: 
+        aggregate.parts:
+          - ref: matrix_index_home
+          - ref: mirror_matrix_index_home
+        shift: [0,18]
+      size: [20,35]
+      bound: false
+      operation: add
+  _expand:
+    - what: outline
+      name: _first
+      expand: 2
+  _fillet:
+    - what: outline
+      name: _expand
+      fillet: 3
+  main:
+    - what: outline
+      name: _fillet
+      fillet: 3
+  plate:
+    - what: outline
+      name: main
+    - what: outline
+      name: cutout
+      operation: subtract
+
+pcbs:
+  microkeys:
+    outlines:
+      main:
+        outline: main
+    footprints:
+      choc:
+        what: choc
+        where: true
+        params:
+          from: "{{column_net}}"
+          to: GND
+          keycaps: true
+      rgbs:
+        what: sk6812minie 
+        where: true
+        params:
+          din: "{{key.led_din}}"
+          dout: "{{key.led_dout}}"
+        adjust:
+          shift: [0, -4.7]
+      tenting_puck:
+        what: tentingpuck
+        adjust: 
+          shift: [120,-125.75]
+        params:
+          net: GND
+      promicro:
+        what: promicro
+        where:
+          aggregate.parts:
+            - ref: matrix_index_home
+            - ref: mirror_matrix_index_home
+          rotate: -90
+          shift: [0,18]
+        params:
+          orientation: up
+      oled:
+        what: oled
+        where:
+          aggregate.parts:
+            - ref: matrix_index_home
+            - ref: mirror_matrix_index_home
+          rotate: 90
+          shift: [-6,-1]
+        params:
+          side: "F"
+          SDA: P2
+          SCL: P3
